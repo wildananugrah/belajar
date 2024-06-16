@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  fe-web-nextjs:
+    build:
+      context: .
+      dockerfile: ./app.Dockerfile
+    container_name: fe-web-nextjs
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - BACKEND_SERVICE=http://fastify-app:3010
+    networks:
+      app-net: {}
+    # logging:
+    #   driver: gelf
+    #   options:
+    #     gelf-address: "udp://172.26.1.121:12201"
+    #     tag: "cms-app"
+
+networks:
+  app-net:
+    external: true
+    name: "belajar-net"

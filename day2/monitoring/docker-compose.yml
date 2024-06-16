@@ -1,0 +1,74 @@
+version: "3.1"
+
+services:
+  jaeger:
+    image: jaegertracing/all-in-one
+    ports:
+      - 4318:4318
+      - 4317:4317
+      - 16686:16686
+      - 9411:9411
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+    networks:
+      app-net: {}
+  prometheus:
+    image: prom/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--enable-feature=otlp-write-receive"
+    volumes:
+      - ./setup/prometheus/:/etc/prometheus/
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    networks:
+      app-net: {}
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      app-net: {}
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    volumes:
+      - ./setup/config/promtail.yaml:/etc/promtail/docker-config.yaml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/docker-config.yaml
+    depends_on:
+      - loki
+    networks:
+      app-net: {}
+  docker_stats_exporter:
+    image: wywywywy/docker_stats_exporter:latest
+    restart: always
+    ports:
+      - "9487:9487"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      app-net: {}
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    ports:
+      - "4000:3000"
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: p@ssw0rd1!
+    volumes:
+      - ./data/grafana-storage:/var/lib/grafana
+      - ./setup/config/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml
+    networks:
+      app-net: {}
+
+networks:
+  app-net:
+    external: true
+    name: "belajar-net"

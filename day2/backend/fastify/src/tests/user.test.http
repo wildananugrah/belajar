@@ -1,0 +1,37 @@
+@host=http://localhost:3010
+
+POST {{host}}/user/register
+Content-Type: application/json
+
+{
+    "identifier": "testuser1",
+    "password": "p@ssw0rd"
+}
+
+####
+# @name Login
+POST {{host}}/user/login
+Content-Type: application/json
+
+{
+    "identifier": "testuser1",
+    "password": "p@ssw0rd"
+}
+
+###
+
+@token = {{Login.response.body.token}}
+
+###
+GET {{host}}/user/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+DELETE {{host}}/user
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+GET {{host}}/_/healthcheck
+

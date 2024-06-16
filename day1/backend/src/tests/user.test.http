@@ -1,0 +1,21 @@
+@host=http://localhost:3010
+
+POST {{host}}/user/register
+Content-Type: application/json
+
+{
+    "username": "testuser2",
+    "password": "p@ssw0rd"
+}
+
+####
+POST {{host}}/user/login
+Content-Type: application/json
+
+{
+    "username": "testuser2",
+    "password": "p@ssw0rd"
+}
+
+###
+GET {{host}}/_/healthcheck

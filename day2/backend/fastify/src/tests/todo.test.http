@@ -1,0 +1,74 @@
+@host=http://localhost:3010
+
+###
+GET {{host}}/_/healthcheck
+
+####
+POST {{host}}/user/register
+Content-Type: application/json
+
+{
+    "identifier": "testuser1",
+    "password": "p@ssw0rd"
+}
+
+####
+# @name Login
+POST {{host}}/user/login
+Content-Type: application/json
+
+{
+    "identifier": "test@mail.com",
+    "password": "p@ssw0rd"
+}
+
+###
+
+@token = {{Login.response.body.token}}
+
+###
+POST {{host}}/todo
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "todo 1",
+    "description": "todo 1 description"
+}
+
+### 
+# @name Todos
+GET {{host}}/todo
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+@todoId = {{Todos.response.body.$[0].id}}
+
+###
+GET {{host}}/todo/{{todoId}}
+Content-Type: application/json
+
+###
+PUT {{host}}/todo/{{todoId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "todo 1 update",
+    "description": "todo 1 description update"
+}
+
+###
+GET {{host}}/todo/{{todoId}}
+Content-Type: application/json
+
+
+###
+DELETE {{host}}/todo/{{todoId}}
+Content-Type: application/json
+
+###
+DELETE {{host}}/user
+Content-Type: application/json
+Authorization: Bearer {{token}}

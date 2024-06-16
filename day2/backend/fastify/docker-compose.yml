@@ -1,0 +1,40 @@
+version: "3.1"
+
+services:
+  fastify-app:
+    build:
+      context: .
+      dockerfile: ./app.Dockerfile
+    container_name: fastify-app
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
+      app_name: "fastify-app"
+    restart: always
+    ports:
+      - 3010:3010
+    environment:
+      - APP_ENV=production
+      - APP_HOST
+      - APP_PORT
+      - DB_HOST=todo-db
+      - DB_PORT=5432
+      - DB_DATABASE
+      - DB_USER
+      - DB_PASS
+      - DB_POOL_MIN
+      - DB_POOL_MAX
+      - DB_IDLE_TIMEOUT
+      - DB_CONNECTION_TIMEOUT
+      - DB_MAX_USES
+      - JAEGER_URL
+      - PRIVATE_KEY_FILE
+      - CERTIFICATE_FILE
+      - JWT_EXPIRED
+    networks:
+      app-net: {}
+
+networks:
+  app-net:
+    external: true
+    name: "belajar-net"
