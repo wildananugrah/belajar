@@ -3,16 +3,16 @@ import { check } from 'k6';
 
 const host = 'http://localhost:3010';
 
-// export let options = {
-//   // stages: [
-//   //   { duration: '30m', target: 15 },
-//   // ],
-//   vus: 10,
-//   duration: '30m',
-//   thresholds: {
-//     'http_req_duration': ['p(95)<500']
-//   },
-// };
+export let options = {
+  // stages: [
+  //   { duration: '30m', target: 15 },
+  // ],
+  vus: 10,
+  duration: '30m',
+  thresholds: {
+    'http_req_duration': ['p(95)<500']
+  },
+};
 
 function setup() {
   // Perform user registration and login to get an authentication token

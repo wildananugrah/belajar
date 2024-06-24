@@ -50,8 +50,11 @@ describe("template spec", () => {
     login();
     clickTodoMenu();
     addTodo();
+    cy.wait(2000);
     editTodo();
+    cy.wait(2000);
     deleteTodo();
+    cy.wait(2000);
     signout();
   });
 });

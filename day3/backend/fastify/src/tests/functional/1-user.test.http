@@ -1,0 +1,75 @@
+@host=http://localhost:3010
+
+###
+# @name AdminLogin
+POST {{host}}/_/admin/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "p@ssw0rd"
+}
+
+###
+@token = {{AdminLogin.response.body.token}}
+
+###
+POST {{host}}/user
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "identifier": "testuser1",
+    "password": "p@ssw0rd"
+}
+
+####
+# @name User
+GET {{host}}/user
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+@userId = {{User.response.body.data.[0].id}}
+
+###
+GET {{host}}/user/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+PUT {{host}}/user/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "password": "p0ssw@rd"
+}
+
+###
+DELETE {{host}}/user/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+# @name AuthLogin
+POST {{host}}/user/auth
+Content-Type: application/json
+
+{
+    "identifier": "testuser1",
+    "password": "password"
+}
+
+###
+@authToken = {{AuthLogin.response.body.data.token}}
+
+###
+GET {{host}}/user/access/moduletest2
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+GET {{host}}/_/healthcheck
+

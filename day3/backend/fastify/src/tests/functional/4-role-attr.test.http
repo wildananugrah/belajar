@@ -1,0 +1,80 @@
+@host=http://localhost:3010
+
+###
+# @name AdminLogin
+POST {{host}}/_/admin/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "p@ssw0rd"
+}
+
+###
+@token = {{AdminLogin.response.body.token}}
+
+POST {{host}}/role
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "roleName": "ADMIN"
+}
+
+####
+# @name Role
+GET {{host}}/role
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+@roleId = {{Role.response.body.data.[0].id}}
+
+###
+POST {{host}}/role/attr
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "module": "app1",
+    "attributes": [{"name": "uri1"}],
+    "roleId": "{{roleId}}"
+}
+
+###
+# @name RoleAttr
+GET {{host}}/role/attr?roleId={{roleId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+@roleAttrId = {{RoleAttr.response.body.data.[0].id}}
+
+###
+GET {{host}}/role/attr/{{roleAttrId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+PUT {{host}}/role/attr/{{roleAttrId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "module": "app1Update",
+    "attributes": [{"name": "uri1"}, {"name": "uri2"}]
+}
+
+###
+DELETE {{host}}/role/attr/{{roleAttrId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+DELETE {{host}}/role/{{roleId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+GET {{host}}/_/healthcheck
+

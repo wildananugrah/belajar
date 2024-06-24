@@ -1,0 +1,19 @@
+@host=http://localhost:3010
+
+###
+# @name AdminLogin
+POST {{host}}/_/admin/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "p@ssw0rd"
+}
+
+###
+@token = {{AdminLogin.response.body.token}}
+
+###
+GET {{host}}/user/role/eb34c585-1818-4787-b7fe-51c529037396/attr
+Content-Type: application/json
+Authorization: Bearer {{token}}
