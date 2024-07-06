@@ -1,5 +1,6 @@
 import { backendService } from "@/configs/common.config";
 import { MethodHandler } from "@/helpers/common.type";
+import { trace } from "@opentelemetry/api";
 import axios, { AxiosError } from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -17,6 +18,8 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   try {
     const { roleId } = req.body;
     const { userId } = req.query;
+    const tracer = trace.getTracer("default");
+    const span = tracer.startSpan("role.attr.postHandler");
     const response = await axios.request({
       url: `${backendService}/user/role/${userId}`,
       method: "POST",
@@ -28,6 +31,7 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
         roleId,
       }),
     });
+    span.end();
     res.status(200).send(response.data);
   } catch (error: any) {
     return apiErrorHandler(error, res);
@@ -37,6 +41,8 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 const getHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   const { userId = undefined } = req.query;
   try {
+    const tracer = trace.getTracer("default");
+    const span = tracer.startSpan("role.attr.getHandler");
     const response = await axios.request({
       url: `${backendService}/user/role${
         userId === undefined ? "" : `/${userId}`
@@ -47,6 +53,7 @@ const getHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
         Authorization: `Bearer ${req.headers.authorization?.split(" ")[1]}`,
       },
     });
+    span.end();
     res.status(200).send(response.data);
   } catch (error: any) {
     return apiErrorHandler(error, res);
@@ -59,6 +66,8 @@ const deleteHandler = async (
 ) => {
   const { userRoleId = undefined } = req.query;
   try {
+    const tracer = trace.getTracer("default");
+    const span = tracer.startSpan("role.attr.deleteHandler");
     const response = await axios.request({
       url: `${backendService}/user/role/${userRoleId}`,
       method: "DELETE",
@@ -67,6 +76,7 @@ const deleteHandler = async (
         Authorization: `Bearer ${req.headers.authorization?.split(" ")[1]}`,
       },
     });
+    span.end();
     res.status(200).send(response.data);
   } catch (error: any) {
     return apiErrorHandler(error, res);

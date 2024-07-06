@@ -7,7 +7,15 @@ import { IUserRoleAttrDB } from "../../helpers/types/user-role-attr-db.dto";
 export class UserRoleService implements IUserRoleService {
   tblName: string = "tbl_trx_user_role";
   insertQuery: string = `INSERT INTO ${this.tblName}(user_id, role_id) VALUES($1, $2) RETURNING *`;
-  selectByUserIdQuery: string = `SELECT * FROM ${this.tblName} WHERE user_id=$1`;
+  selectByUserIdQuery: string = `SELECT 
+      a.user_role_id, 
+      a.user_id, 
+      a.role_id, 
+      a.created_at,
+      b.role_name
+    FROM ${this.tblName} a
+    JOIN tbl_mst_role b on b.role_id = a.role_id
+    WHERE a.user_id=$1`;
   deleteByIdQuery: string = `DELETE FROM ${this.tblName} WHERE user_role_id=$1`;
   deleteByUserIdQuery: string = `DELETE FROM ${this.tblName} WHERE user_id=$1`;
   selectUserAttrQuery: string = `
@@ -51,6 +59,7 @@ export class UserRoleService implements IUserRoleService {
         userId: dbResult.rows[0].user_id,
         roleId: dbResult.rows[0].role_id,
         id: dbResult.rows[0].user_role_id,
+        roleName: dbResult.rows[0].role_name
       };
     } catch (error: any) {
       throw new DatabaseException(500, error.message);
@@ -98,6 +107,7 @@ export class UserRoleService implements IUserRoleService {
         userId: row.user_id,
         roleId: row.role_id,
         id: row.user_role_id,
+        roleName: row.role_name
       }));
     } catch (error: any) {
       throw new DatabaseException(500, error.message);

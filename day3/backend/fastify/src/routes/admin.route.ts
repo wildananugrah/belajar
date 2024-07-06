@@ -7,7 +7,8 @@ const routes = async (app: any, options: any) => {
     handler: async (req: any, res: any) => {
       try {
         const { username, password } = req.body;
-        return await app.admin.login(username, password);
+        const user_uuid = req.headers["x-user_uuid"];
+        return await app.admin.login(username, password, user_uuid);
       } catch (error: any) {
         return errorResponseHandler(error, res);
       }

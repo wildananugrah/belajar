@@ -1,10 +1,13 @@
 import { backendService } from "@/configs/common.config";
 import { MethodHandler } from "@/helpers/common.type";
+import { trace } from "@opentelemetry/api";
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const getHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   try {
+    const tracer = trace.getTracer("default");
+    const span = tracer.startSpan("me.getHandler");
     const token = req.headers.authorization?.split(" ")[1];
     const config = {
       url: `${backendService}/_/admin/me`,
@@ -15,6 +18,7 @@ const getHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
       },
     };
     const response = await axios.request(config);
+    span.end();
     res.status(200).send(response.data);
   } catch (error: any) {
     res.status(500).json({ statusCode: 500, message: error.message });

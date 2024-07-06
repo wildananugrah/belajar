@@ -53,23 +53,5 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###
-# @name AuthLogin
-POST {{host}}/user/auth
-Content-Type: application/json
-
-{
-    "identifier": "testuser1",
-    "password": "password"
-}
-
-###
-@authToken = {{AuthLogin.response.body.data.token}}
-
-###
-GET {{host}}/user/access/moduletest2
-Content-Type: application/json
-Authorization: Bearer {{authToken}}
-
-###
 GET {{host}}/_/healthcheck
 

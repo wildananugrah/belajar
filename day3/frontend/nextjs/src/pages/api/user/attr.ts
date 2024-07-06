@@ -1,5 +1,6 @@
 import { backendService } from "@/configs/common.config";
 import { MethodHandler } from "@/helpers/common.type";
+import { trace } from "@opentelemetry/api";
 import axios, { AxiosError } from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,6 +16,8 @@ const apiErrorHandler = (error: any, res: any) => {
 
 const postHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   try {
+    const tracer = trace.getTracer("default");
+    const span = tracer.startSpan("role.attr.postHandler");
     const { module, attributes, userId } = req.body;
     const response = await axios.request({
       url: `${backendService}/user/attr`,
@@ -29,6 +32,7 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
         userId,
       }),
     });
+    span.end();
     res.status(200).send(response.data);
   } catch (error: any) {
     return apiErrorHandler(error, res);
@@ -38,6 +42,8 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 const getHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   const { userAttributeId = undefined, userId = undefined } = req.query;
   try {
+    const tracer = trace.getTracer("default");
+    const span = tracer.startSpan("role.attr.getHandler");
     const url = `${backendService}/user/attr${
       userId === undefined ? "" : `?userId=${userId}`
     }${userAttributeId === undefined ? "" : `/${userAttributeId}`}`;
@@ -49,6 +55,7 @@ const getHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
         Authorization: `Bearer ${req.headers.authorization?.split(" ")[1]}`,
       },
     });
+    span.end();
     res.status(200).send(response.data);
   } catch (error: any) {
     return apiErrorHandler(error, res);
@@ -59,6 +66,8 @@ const putHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   const { userAttributeId = undefined } = req.query;
   const { module, attributes } = req.body;
   try {
+    const tracer = trace.getTracer("default");
+    const span = tracer.startSpan("role.attr.putHandler");
     const response = await axios.request({
       url: `${backendService}/user/attr/${userAttributeId}`,
       method: "PUT",
@@ -68,6 +77,7 @@ const putHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
       },
       data: JSON.stringify({ module, attributes }),
     });
+    span.end();
     res.status(200).send(response.data);
   } catch (error: any) {
     return apiErrorHandler(error, res);
@@ -80,6 +90,8 @@ const deleteHandler = async (
 ) => {
   const { userAttrId = undefined } = req.query;
   try {
+    const tracer = trace.getTracer("default");
+    const span = tracer.startSpan("role.attr.deleteHandler");
     const response = await axios.request({
       url: `${backendService}/user/attr/${userAttrId}`,
       method: "DELETE",
@@ -88,6 +100,7 @@ const deleteHandler = async (
         Authorization: `Bearer ${req.headers.authorization?.split(" ")[1]}`,
       },
     });
+    span.end();
     res.status(200).send(response.data);
   } catch (error: any) {
     return apiErrorHandler(error, res);

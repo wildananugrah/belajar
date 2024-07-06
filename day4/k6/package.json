@@ -1,0 +1,21 @@
+{
+  "name": "k6",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "k6 run src/script.js",
+    "start:csv": "k6 run --out csv=test_results-2.csv src/script.js",
+    "start:dashboard": "k6 run --out web-dashboard src/script.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "k6": "^0.0.0"
+  },
+  "devDependencies": {
+    "@types/k6": "^0.50.0"
+  }
+}

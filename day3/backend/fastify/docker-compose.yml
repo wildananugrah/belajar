@@ -1,15 +1,15 @@
 version: "3.1"
 
 services:
-  fastify-app:
+  user-mgmt-app:
     build:
       context: .
       dockerfile: ./app.Dockerfile
-    container_name: fastify-app
+    container_name: user-mgmt-app
     labels:
       logging: "promtail"
       logging_jobname: "containerlogs"
-      app_name: "fastify-app"
+      app_name: "user-mgmt-app"
     restart: always
     ports:
       - 3010:3010
@@ -17,6 +17,8 @@ services:
       - APP_ENV=production
       - APP_HOST
       - APP_PORT
+      - APP_USERNAME
+      - APP_PASSWORD
       - DB_HOST=user-mgmt-db
       - DB_PORT=5432
       - DB_DATABASE

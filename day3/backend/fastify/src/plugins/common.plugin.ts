@@ -33,6 +33,7 @@ import { IUserRoleService } from "../dependencies/iuser-role.service";
 import { UserRoleService } from "../dependencies/impl/user-role.service";
 import { UserRole } from "../logics/user-role";
 import { Admin } from "../logics/admin";
+import { Auth } from "../logics/auth";
 
 export default fp(async (app, options) => {
   var pool = new Pool({
@@ -58,7 +59,8 @@ export default fp(async (app, options) => {
     privateKey,
     certificate,
   });
-  const user = new User({ userService, userRoleService, jwtService });
+  const user = new User({ userService });
+  const auth = new Auth({ userService, userRoleService, jwtService });
   const userAttribute = new UserAttribute({ userAttrService });
   const roleAttribute = new RoleAttribute({ roleAttrService });
   const role = new Role({ roleService });
@@ -70,5 +72,6 @@ export default fp(async (app, options) => {
   app.decorate("roleAttribute", roleAttribute);
   app.decorate("userRole", userRole);
   app.decorate("admin", admin);
+  app.decorate("auth", auth);
   app.decorate("healtcheckService", healtcheckService);
 });

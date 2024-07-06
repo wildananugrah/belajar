@@ -1,0 +1,26 @@
+@host=http://localhost:3010
+
+POST {{host}}/resource/tbl_mst_role
+Content-Type: application/json
+
+{
+    "role_name": "ADMIN"
+}
+
+###
+GET {{host}}/resource/tbl_mst_role?fields=role_name,created_at,id
+Content-Type: application/json
+
+###
+GET {{host}}/resource/tbl_mst_role/5d1f05fa-fddf-4867-a588-488b2784bf48?fields=role_name,created_at
+
+###
+PUT {{host}}/resource/tbl_mst_role/5d1f05fa-fddf-4867-a588-488b2784bf48
+Content-Type: application/json
+
+{
+    "role_name": "SUPERADMIN"
+}
+
+###
+DELETE {{host}}/resource/tbl_mst_role/5d1f05fa-fddf-4867-a588-488b2784bf48

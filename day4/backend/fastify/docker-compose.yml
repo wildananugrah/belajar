@@ -1,0 +1,42 @@
+version: "3.1"
+
+services:
+  generic-app:
+    build:
+      context: .
+      dockerfile: ./app.Dockerfile
+    container_name: generic-app
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
+      app_name: "generic-app"
+    restart: always
+    ports:
+      - 3010:3010
+    environment:
+      - APP_ENV=production
+      - APP_HOST
+      - APP_PORT
+      - APP_USERNAME
+      - APP_PASSWORD
+      - DB_HOST=user-mgmt-db
+      - DB_PORT=5432
+      - DB_DATABASE
+      - DB_USER
+      - DB_PASS
+      - DB_POOL_MIN
+      - DB_POOL_MAX
+      - DB_IDLE_TIMEOUT
+      - DB_CONNECTION_TIMEOUT
+      - DB_MAX_USES
+      - JAEGER_URL=http://jaeger:4318/v1/traces
+      - PRIVATE_KEY_FILE
+      - CERTIFICATE_FILE
+      - JWT_EXPIRED
+    networks:
+      app-net: {}
+
+networks:
+  app-net:
+    external: true
+    name: "generic-net"

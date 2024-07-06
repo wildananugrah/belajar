@@ -10,6 +10,7 @@ export function customHook(app: any) {
     const activeSpan = api.trace.getSpan(api.context.active());
     const [seconds, nanoseconds] = process.hrtime(request.startTime);
     const responseTime = seconds * 1000 + nanoseconds / 1e6; // Convert to milliseconds
+    const userId = request.headers["x-userId"];
 
     console.info(
       JSON.stringify({
@@ -20,6 +21,7 @@ export function customHook(app: any) {
         uri: request.url,
         statusCode: reply.statusCode,
         clientIp: request.ip,
+        username: "kangricky",
         responseTime: responseTime.toFixed(2),
       })
     );

@@ -8,7 +8,7 @@ export let options = {
   //   { duration: '30m', target: 15 },
   // ],
   vus: 10,
-  duration: '30m',
+  duration: '5m',
   thresholds: {
     'http_req_duration': ['p(95)<500']
   },

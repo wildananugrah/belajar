@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  user-mgmt-web:
+    build:
+      context: .
+      dockerfile: ./app.Dockerfile
+    container_name: user-mgmt-web
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - BACKEND_SERVICE=http://user-mgmt-app:3010
+      - JAEGER_URL
+    networks:
+      app-net: {}
+
+networks:
+  app-net:
+    external: true
+    name: "belajar-net"

@@ -18,7 +18,7 @@ POST {{host}}/user/login
 Content-Type: application/json
 
 {
-    "identifier": "test@mail.com",
+    "identifier": "testuser1",
     "password": "p@ssw0rd"
 }
 

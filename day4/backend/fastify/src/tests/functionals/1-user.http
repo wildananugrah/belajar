@@ -1,0 +1,62 @@
+@host=http://localhost:3010
+
+###
+# @name AdminLogin
+POST {{host}}/_/admin/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "p@ssw0rd"
+}
+
+###
+@token = {{AdminLogin.response.body.token}}
+
+POST {{host}}/resource/user
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "identifier" : "test5@mail.com",
+    "password": "p@ssw0rd!"
+}
+
+###
+GET {{host}}/resource/user?fields=id,identifier,created_at,updated_at
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+GET {{host}}/resource/user/923e3d01-0adb-4ad3-bf0a-24671a1d5a4e?fields=identifier,password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### 
+PUT {{host}}/resource/user/923e3d01-0adb-4ad3-bf0a-24671a1d5a4e
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "identifier": "test2-update@mail.com",
+    "password": "yopass!"
+}
+
+###
+DELETE {{host}}/resource/user/923e3d01-0adb-4ad3-bf0a-24671a1d5a4e
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+GET {{host}}/func/users?params[identifier]=test3@mail.com
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/func/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "identifier":"test1@mail.com"
+}

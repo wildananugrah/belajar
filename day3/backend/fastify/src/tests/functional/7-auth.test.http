@@ -1,0 +1,24 @@
+@host=http://localhost:3010
+
+###
+# @name AuthLogin
+POST {{host}}/auth/user
+Content-Type: application/json
+
+{
+    "identifier": "iqbal",
+    "password": "password"
+}
+
+###
+@authToken = {{AuthLogin.response.body.data.token}}
+
+###
+GET {{host}}/auth/access/attr
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+GET {{host}}/auth/access/moduletest3
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

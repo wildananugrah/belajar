@@ -1,13 +1,13 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
-// export let options = {
-//   stages: [
-//     { duration: '1m', target: 1 }, // ramp-up to 1 user
-//     { duration: '5m', target: 1 }, // stay at 1 user for 5 minutes
-//     { duration: '1m', target: 0 }, // ramp-down to 0 users
-//   ],
-// };
+export let options = {
+  stages: [
+    // { duration: '1m', target: 1 }, // ramp-up to 1 user
+    { duration: '5m', target: 10 }, // stay at 1 user for 5 minutes
+    // { duration: '1m', target: 0 }, // ramp-down to 0 users
+  ],
+};
 
 const host = 'http://localhost:3010';
 

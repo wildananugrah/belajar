@@ -1,0 +1,26 @@
+apiVersion: 1
+
+datasources:
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    version: 1
+    editable: false
+    isDefault: true # Changed to false if you want to set Prometheus as the default
+
+  - name: Jaeger
+    type: jaeger
+    access: proxy
+    url: http://jaeger:16686
+    version: 1
+    editable: false
+    isDefault: false
+
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    version: 1
+    editable: false
+    isDefault: false # Set Prometheus as the default datasource

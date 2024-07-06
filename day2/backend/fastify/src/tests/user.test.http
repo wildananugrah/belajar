@@ -4,7 +4,7 @@ POST {{host}}/user/register
 Content-Type: application/json
 
 {
-    "identifier": "testuser1",
+    "identifier": "test@mail.com",
     "password": "p@ssw0rd"
 }
 
@@ -14,7 +14,7 @@ POST {{host}}/user/login
 Content-Type: application/json
 
 {
-    "identifier": "testuser1",
+    "identifier": "test@mail.com",
     "password": "p@ssw0rd"
 }
 

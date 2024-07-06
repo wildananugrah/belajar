@@ -1,5 +1,5 @@
 {
-  "name": "phoenix-servo-2.0-fastify",
+  "name": "user-mgmt-app",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -25,6 +25,8 @@
     "@opentelemetry/sdk-metrics": "^1.24.0",
     "@opentelemetry/sdk-node": "^0.51.0",
     "@opentelemetry/semantic-conventions": "^1.24.0",
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
     "fastify-plugin": "^4.5.1",

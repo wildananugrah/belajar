@@ -2,6 +2,7 @@ import { appPassword, appUsername } from "../configs/common.config";
 import { jwtExpired } from "../configs/jwt.config";
 import { IJWTService } from "../dependencies/ijwt.service";
 import { LogicException } from "../exceptions/logic.exception";
+import { comparePassword } from "../helpers/common.helper";
 
 export class Admin {
   private jwtService: IJWTService;
@@ -11,7 +12,7 @@ export class Admin {
   async login(username: string, password: string) {
     if (username !== appUsername)
       throw new LogicException(400, "invalid username");
-    if (password !== appPassword)
+    if (!(await comparePassword(password, appPassword)))
       throw new LogicException(400, "invalid password");
     return this.jwtService.create({ username }, jwtExpired);
   }

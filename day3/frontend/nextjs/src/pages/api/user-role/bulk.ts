@@ -1,5 +1,6 @@
 import { backendService } from "@/configs/common.config";
 import { MethodHandler } from "@/helpers/common.type";
+import { trace } from "@opentelemetry/api";
 import axios, { AxiosError } from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,6 +16,8 @@ const apiErrorHandler = (error: any, res: any) => {
 
 const postHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   try {
+    const tracer = trace.getTracer("default");
+    const span = tracer.startSpan("role.attr.postHandler");
     const { roleIds } = req.body;
     const { userId } = req.query;
     const response = await axios.request({
@@ -28,6 +31,7 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
         roleIds,
       }),
     });
+    span.end();
     res.status(200).send(response.data);
   } catch (error: any) {
     return apiErrorHandler(error, res);
